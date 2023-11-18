@@ -15,7 +15,7 @@
   </header>
   <div class="container">
    <div id="main" class="card card-body">
-    <h2 class="title">Add Items</h2>
+    <h2 class="title" id="title1">Add Items</h2>
     <form class="form-inline mb-3">
       <input type="text" class="form-control mr-2">
       <input type="submit" class="btn btn-dark" value="Submit">
@@ -29,6 +29,12 @@
     </ul>
    </div>
   </div>
-
+<script>
+  var headertitle = document.getElementById("header-title");
+  var title1 = document.getElementById("title1");
+  headertitle.style.border="solid 2px #000";
+  title1.style.color="green";
+  title1.innerHTML="<b>Add Items</b>";
+</script>
 </body>
 </html>
