@@ -28,6 +28,7 @@
       <li class="list-group-item">Item 4</li>
       <li>Item 5 (no class name)</li>
     </ul>
+    <span></span>
    </div>
   </div>
 <script>
@@ -58,6 +59,39 @@
   for(let i=0;i<odditems.length;i++){
     odditems[i].style.backgroundColor="green";
   }
+
+  var itemlist = document.querySelector("#items");
+  itemlist.parentElement.style.backgroundColor="lightblue";
+  console.log(itemlist.firstChild);
+  console.log(itemlist.firstElementChild);
+  console.log(itemlist.lastChild);
+  console.log(itemlist.lastElementChild);
+  console.log(itemlist.nextSibling);
+  console.log(itemlist.nextElementSibling);
+  console.log(itemlist.previousSibling);
+  console.log(itemlist.previousElementSibling);
+
+  //creating div element and adding a text node
+  var newdiv=document.createElement("div");
+  newdiv.className="hello";
+  newdiv.id="hello1";
+  newdiv.setAttribute("title","hello div");
+  var newdivtext=document.createTextNode("HELLO");
+  newdiv.appendChild(newdivtext);
+  console.log(newdiv);
+  newdiv.style.fontSize="30px";
+  //adding newdiv before item lister header
+  var headcontainer=document.querySelector("header .container");
+  var headerh1=document.querySelector("header h1");
+  headcontainer.insertBefore(newdiv,headerh1);
+  //adding newdiv before item1
+  var newitem=document.createElement("li");
+  newitem.className="list-group-item";
+  var newitemtext=document.createTextNode("HELLO");
+  newitem.appendChild(newitemtext);
+  var ul=document.querySelector(".list-group");
+  ul.insertBefore(newitem,li[0]);
+
 </script>
 </body>
 </html>
