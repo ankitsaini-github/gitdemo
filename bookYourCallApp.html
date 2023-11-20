@@ -198,12 +198,15 @@
                             const mobile = document.getElementById("phone").value;
                             const date = document.getElementById("date").value;
                             const time = document.getElementById("time").value;
-                            //console.log(name,emailid,mobile,date,time);
-                            localStorage.setItem('name',name);
-                            localStorage.setItem('email',emailid);
-                            localStorage.setItem('mobile',mobile);
-                            localStorage.setItem('date',date);
-                            localStorage.setItem('time',time);
+                            let user1 ={
+                                name:name,
+                                email:emailid,
+                                mobile:mobile,
+                                date:date,
+                                time:time
+                            };
+                            let user1_serial=JSON.stringify(user1);
+                            localStorage.setItem('user1',user1_serial);
 
                     }
     </script>
