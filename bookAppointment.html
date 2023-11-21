@@ -54,6 +54,7 @@
     var filter=document.getElementById('filter');
     form.addEventListener('submit',addItem);
     itemlist.addEventListener('click',removeItem);
+    itemlist.addEventListener('click',editItem);
     filter.addEventListener('keyup',filterItems);
 
     function addItem(e){
@@ -108,9 +109,35 @@
     function removeItem(e){
         //e.preventDefault();
         if(e.target.classList.contains('delete')){
-            if(confirm('Are you sure ?')){
+            if(confirm('Want to DELETE appointment ?')){
                 var li=e.target.parentElement;
                 var email=li.childNodes[2].textContent;
+                localStorage.removeItem(email);
+                itemlist.removeChild(li);
+            }
+        }
+    }
+
+    function editItem(e){
+        if(e.target.classList.contains('editBtn')){
+            if(confirm('Want to EDIT appointment ?')){
+                var li=e.target.parentElement;
+                var email=li.childNodes[2].textContent;
+                var appointment=JSON.parse(localStorage.getItem(email));
+                //edit using local storage
+                // document.getElementById('name').value=appointment.name;
+                // document.getElementById('email').value=appointment.email;
+                // document.getElementById('phone').value=appointment.phone;
+                // document.getElementById('date').value=appointment.date;
+                // document.getElementById('time').value=appointment.time;
+
+                //edit using li element values
+                document.getElementById('name').value=li.childNodes[0].textContent;
+                document.getElementById('email').value=li.childNodes[2].textContent;
+                document.getElementById('phone').value=li.childNodes[4].textContent;
+                document.getElementById('date').value=li.childNodes[6].textContent;
+                document.getElementById('time').value=li.childNodes[8].textContent;
+
                 localStorage.removeItem(email);
                 itemlist.removeChild(li);
             }
