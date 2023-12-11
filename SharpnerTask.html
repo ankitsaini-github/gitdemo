@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharpner Tasks</title>
+</head>
+<body>
+    <script>
+        const posts=['one']
+let lastactivitytime=new Date().getTime();
+
+function updateLastUserActivityTime() {
+  return new Promise((resolve, reject) => {
+		setTimeout(()=>{
+    	lastactivitytime=new Date().getTime(); 
+      resolve(lastactivitytime);
+    },1000)
+  })
+}
+
+function createpost(p){
+	return new Promise((resolve,reject)=>{
+  setTimeout(()=>{
+  	posts.push(p)
+    resolve();
+  },2000)
+  })
+}
+
+function printpost(){
+	return new Promise((resolve,reject)=>{
+  setTimeout(()=>{
+  	console.log(posts)
+    resolve();
+  },1000)
+  })
+}
+
+function delpost(){
+	return new Promise((resolve,reject)=>{
+  setTimeout(()=>{
+  	if(posts.length>0){
+    	posts.pop()
+      resolve("deleted");
+    }
+    else{
+    	reject("error")
+    }
+    
+  },2000)
+  })
+}
+
+/* createpost('two')
+.then(()=>{return createpost('three')})
+.then(()=>{return delpost()})
+.then((msg)=>{console.log(msg);return delpost()})
+.then((msg)=>{console.log(msg);return delpost()})
+.then((msg)=>{console.log(msg);return delpost()})
+.then((msg)=>{console.log(msg);return printpost()},(msg2)=>{console.log(msg2);return printpost()}) */
+
+console.log('time before post 2 '+lastactivitytime)
+let p1=createpost('two')
+let p2=updateLastUserActivityTime()
+Promise.all([p1,p2]).then(()=>{
+	printpost()
+}).then(()=>{
+	console.log('time after post 2 '+lastactivitytime)
+})
+    </script>
+</body>
+</html>
