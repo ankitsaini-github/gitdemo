@@ -22,8 +22,11 @@
         function createpost(p){
           return new Promise((resolve,reject)=>{
           setTimeout(()=>{
+            if(posts.length<10){
             posts.push(p)
             resolve(`created post : ${p}`);
+            }
+            else	reject('ERROR : Space full')
           },2000)
           })
         }
@@ -65,6 +68,7 @@
 
         //-----using async await
         async function createdeletepost(){
+        try{
           console.log('time before post 2 '+lastactivitytime);
           let createdpost=await createpost('POST TWO');
           console.log(createdpost);
@@ -74,33 +78,20 @@
           console.log(createdpost);
           let printedpost=await printpost();
           console.log(printedpost);
-          let deletedpost
-          try{
-            deletedpost=await delpost();
-          }catch(e){
-            deletedpost=e
-          }
+          let deletedpost=await delpost();
           console.log(deletedpost);
           printedpost=await printpost();
           console.log(printedpost);
-          try{
-            deletedpost=await delpost();
-          }catch(e){
-            deletedpost=e
-          }
+          deletedpost=await delpost();
           console.log(deletedpost);
-          try{
-            deletedpost=await delpost();
-          }catch(e){
-            deletedpost=e
-          }
+          deletedpost=await delpost();
           console.log(deletedpost);
-          try{
-            deletedpost=await delpost();
-          }catch(e){
-            deletedpost=e
-          }
+          deletedpost=await delpost();
           console.log(deletedpost);
+          }catch(e){
+            console.log(e);
+          }
+          console.log('end of function')
         }
 
         createdeletepost();
