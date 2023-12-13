@@ -20,7 +20,7 @@
           </div>
         </div>
       </header>
-      <div class="container">
+      <div class="container mb-3">
        <div id="main" class="card card-body">
         <h2 class="title">Add Appointment</h2><br>
         <form id="addForm" class=" mb-3">
@@ -43,12 +43,13 @@
         </form>
         <h2 class="title">Appointments</h2>
         <ul id="items" class="list-group">
-          <li class="list-group-item">Abc<br>abc@gmail.com<br>0123123123<br>2023-12-11<br>11:00 am<button class="btn btn-danger btn-sm float-right delete">X</button><button class="btn btn-sm float-right editBtn">EDIT</button></li>
+          <!-- <li class="list-group-item">Abc<br>abc@gmail.com<br>0123123123<br>2023-12-11<br>11:00 am<button class="btn btn-danger btn-sm float-right delete">X</button><button class="btn btn-sm float-right editBtn">EDIT</button></li> -->
         </ul>
        </div>
       </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js" integrity="sha512-b94Z6431JyXY14iSXwgzeZurHHRNkLt9d6bAHt7BZT38eqV+GyngIi/tVye4jBKPYQ2lBdRs0glww4fmpuLRwA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
+    const crudKey='bae2e74b1fd147319e88de5c58faadfe'
     var form=document.getElementById('addForm');
     var itemlist=document.getElementById('items');
     var filter=document.getElementById('filter');
@@ -56,6 +57,18 @@
     itemlist.addEventListener('click',removeItem);
     itemlist.addEventListener('click',editItem);
     filter.addEventListener('keyup',filterItems);
+
+    window.addEventListener('DOMContentLoaded',()=>{
+        axios.get('https://crudcrud.com/api/'+crudKey+'/Appointments')
+        .then((response)=>{
+            for(let i=0;i<response.data.length;i++){
+                showOnScreen(response.data[i])
+            }
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    })
 
     function showOnScreen(appointment){
         var li=document.createElement('li');
@@ -98,7 +111,7 @@
             date:document.getElementById('date').value,
             time:document.getElementById('time').value
         };
-        axios.post('https://crudcrud.com/api/bae2e74b1fd147319e88de5c58faadfe/Appointments',newappointment)
+        axios.post('https://crudcrud.com/api/'+crudKey+'/Appointments',newappointment)
         .then((response)=>{
             console.log(response)
             showOnScreen(response.data)
