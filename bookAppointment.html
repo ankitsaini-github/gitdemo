@@ -47,7 +47,7 @@
         </ul>
        </div>
       </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js" integrity="sha512-b94Z6431JyXY14iSXwgzeZurHHRNkLt9d6bAHt7BZT38eqV+GyngIi/tVye4jBKPYQ2lBdRs0glww4fmpuLRwA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     var form=document.getElementById('addForm');
     var itemlist=document.getElementById('items');
@@ -57,38 +57,22 @@
     itemlist.addEventListener('click',editItem);
     filter.addEventListener('keyup',filterItems);
 
-    function addItem(e){
-        e.preventDefault();
-        var newname=document.getElementById('name').value;
-        var newemail=document.getElementById('email').value;
-        var newphone=document.getElementById('phone').value;
-        var newdate=document.getElementById('date').value;
-        var newtime=document.getElementById('time').value;
-
-        var newappointment ={
-            name:newname,
-            email:newemail,
-            phone:newphone,
-            date:newdate,
-            time:newtime
-        };
-        var newappointment_serial=JSON.stringify(newappointment);
-        
+    function showOnScreen(appointment){
         var li=document.createElement('li');
         li.className='list-group-item';
-        li.appendChild(document.createTextNode(newname));
+        li.appendChild(document.createTextNode(appointment.name));
         var br1=document.createElement('br');
         li.appendChild(br1)
-        li.appendChild(document.createTextNode(newemail));
+        li.appendChild(document.createTextNode(appointment.email));
         var br2=document.createElement('br');
         li.appendChild(br2)
-        li.appendChild(document.createTextNode(newphone));
+        li.appendChild(document.createTextNode(appointment.phone));
         var br3=document.createElement('br');
         li.appendChild(br3)
-        li.appendChild(document.createTextNode(newdate));
+        li.appendChild(document.createTextNode(appointment.date));
         var br4=document.createElement('br');
         li.appendChild(br4)
-        li.appendChild(document.createTextNode(newtime));
+        li.appendChild(document.createTextNode(appointment.time));
 
         // Create Delete button element
         var delbtn=document.createElement('button');
@@ -103,7 +87,23 @@
         li.appendChild(editBtn);
 
         itemlist.appendChild(li);
-        localStorage.setItem(newemail,newappointment_serial);
+    }
+
+    function addItem(e){
+        e.preventDefault();
+        var newappointment ={
+            name:document.getElementById('name').value,
+            email:document.getElementById('email').value,
+            phone:document.getElementById('phone').value,
+            date:document.getElementById('date').value,
+            time:document.getElementById('time').value
+        };
+        axios.post('https://crudcrud.com/api/bae2e74b1fd147319e88de5c58faadfe/Appointments',newappointment)
+        .then((response)=>{
+            console.log(response)
+            showOnScreen(response.data)
+        })
+        .catch((err)=>{console.log(err)})
     }
 
     function removeItem(e){
