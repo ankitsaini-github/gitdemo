@@ -74,18 +74,20 @@
         var li=document.createElement('li');
         li.className='list-group-item';
         li.appendChild(document.createTextNode(appointment.name));
-        var br1=document.createElement('br');
-        li.appendChild(br1)
+        li.appendChild(document.createElement('br'))
         li.appendChild(document.createTextNode(appointment.email));
-        var br2=document.createElement('br');
-        li.appendChild(br2)
+        li.appendChild(document.createElement('br'))
         li.appendChild(document.createTextNode(appointment.phone));
-        var br3=document.createElement('br');
-        li.appendChild(br3)
+        li.appendChild(document.createElement('br'))
         li.appendChild(document.createTextNode(appointment.date));
-        var br4=document.createElement('br');
-        li.appendChild(br4)
+        li.appendChild(document.createElement('br'))
         li.appendChild(document.createTextNode(appointment.time));
+        //adding id div
+        var uid=document.createElement('div')
+        uid.appendChild(document.createTextNode(appointment._id))
+        uid.setAttribute('id','uid');
+        uid.style.display='none'
+        li.appendChild(uid)
 
         // Create Delete button element
         var delbtn=document.createElement('button');
@@ -124,9 +126,10 @@
         if(e.target.classList.contains('delete')){
             if(confirm('Want to DELETE appointment ?')){
                 var li=e.target.parentElement;
-                var email=li.childNodes[2].textContent;
-                localStorage.removeItem(email);
-                itemlist.removeChild(li);
+                var uid=li.childNodes[9].firstChild.textContent;
+                axios.delete('https://crudcrud.com/api/'+crudKey+'/Appointments/'+uid)
+                .then((res)=>{itemlist.removeChild(li);})
+                .catch((err)=>{console.log(err)})
             }
         }
     }
@@ -137,13 +140,6 @@
                 var li=e.target.parentElement;
                 var email=li.childNodes[2].textContent;
                 var appointment=JSON.parse(localStorage.getItem(email));
-                //edit using local storage
-                // document.getElementById('name').value=appointment.name;
-                // document.getElementById('email').value=appointment.email;
-                // document.getElementById('phone').value=appointment.phone;
-                // document.getElementById('date').value=appointment.date;
-                // document.getElementById('time').value=appointment.time;
-
                 //edit using li element values
                 document.getElementById('name').value=li.childNodes[0].textContent;
                 document.getElementById('email').value=li.childNodes[2].textContent;
