@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller's Admin Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js" integrity="sha512-b94Z6431JyXY14iSXwgzeZurHHRNkLt9d6bAHt7BZT38eqV+GyngIi/tVye4jBKPYQ2lBdRs0glww4fmpuLRwA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        html,body{
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        footer{
+                margin-top: auto;
+            }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark navbar-expand"><div class="container" id="navbrand"><h1 class="navbar-brand ml-4">SELLER's ADMIN PAGE</h1></div></nav>
+    <div id="maindiv" class="container mb-3">
+        <div id="formdiv">
+            <form class="my-4" id="productform">
+                <label for="sellingPrice" class="form-label">Selling Price : </label><br>
+                <input type="number" class="form-control mr-2" id="sellingPrice" placeholder="Selling Price in Rupees" required><br>
+                <label for="productName" class="form-label">Product Name : </label><br>
+                <input type="text" class="form-control mr-2" id="productName" placeholder="Product Name" required><br>
+                <input type="text" id="uid" style="display: none;">
+                <div class="d-grid col-6 mx-auto">
+                <input type="submit" class="btn btn-primary" value="Submit">
+                </div> 
+            </form>
+        </div>
+        <div id="listdiv">
+            <h1 class="title mb-3">Product List :</h1>
+            <div class="card card-body" id="productList">
+                <h5 id="cartValue" class="text-end mb-2"></h5>
+                <ul id="products" class="list-group ">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-body-tertiary text-center">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+          Made By Ankit Saini (Sharpner REST API Task)
+        </div>
+      </footer>
+    <script>
+        const api="https://6579c6be1acd268f9afa0463.mockapi.io/api/products";
+        var form=document.getElementById("productform");
+        var productlist=document.getElementById("products");
+        var cartValue=document.getElementById("cartValue");
+        cartValue.appendChild(document.createTextNode('Total Cart Value : Rs. '))
+        cartValue.appendChild(document.createTextNode('0'))
+        var totalvalue=0;
+        form.addEventListener('submit',addProduct);
+        productlist.addEventListener('click',deleteProduct);
+
+        window.addEventListener('DOMContentLoaded',()=>{
+            axios.get(api)
+            .then((response)=>{
+                value=0
+                for(let i=0;i<response.data.length;i++){
+                displayProduct(response.data[i])
+                value+=Number(response.data[i].sellingPrice)
+                }
+                updateCartValue(value);
+            })
+            .catch(err=>{console.log(err)})
+        })
+
+        function displayProduct(product){
+            var li=document.createElement('li');
+            li.className='list-group-item';
+            li.appendChild(document.createTextNode(product.sellingPrice));
+            li.appendChild(document.createElement('br'));
+            li.appendChild(document.createTextNode(product.name))
+            
+            var uid=document.createElement('div')
+            uid.appendChild(document.createTextNode(product.id))
+            uid.setAttribute('id','uid');
+            uid.style.display='none'
+            li.appendChild(uid)
+
+            var delbtn=document.createElement('button');
+            delbtn.className='btn btn-danger btn-md float-end delete ';
+            delbtn.appendChild(document.createTextNode('Delete Product'));
+            li.appendChild(delbtn);
+            productlist.appendChild(li);
+        }
+
+        function addProduct(e){
+            e.preventDefault(e);
+            var newProduct={
+                sellingPrice: document.getElementById('sellingPrice').value,
+                name: document.getElementById('productName').value
+            };
+            axios.post(api,newProduct)
+            .then(response=>{
+                displayProduct(response.data);
+                value+=Number(newProduct.sellingPrice);
+                updateCartValue(value); 
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        }
+
+        function deleteProduct(e){
+            if(e.target.classList.contains('delete')){
+                if(confirm('Delete product ?')){
+                    var li=e.target.parentElement;
+                    var uid=li.childNodes[3].firstChild.textContent;
+                    axios.delete(`${api}/${uid}`)
+                    .then(response=>{productlist.removeChild(li);
+                        value-=Number(li.childNodes[0].textContent);
+                        updateCartValue(value);
+                    })
+                    .catch(err=>{console.log(err)})
+                }
+            }
+        }
+
+        function updateCartValue(value){
+            cartValue.childNodes[1].textContent=value;
+        }
+
+    </script>
+
+</body>
+</html>
